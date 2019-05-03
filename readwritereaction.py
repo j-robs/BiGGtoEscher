@@ -1,7 +1,5 @@
 import json
-#reactions = input("enter name of file containing reaction list: ")
-reactions = "reactions_iCZ843.txt"
-#reactions = "cutreactions.txt"
+reactions = input("enter name of file containing reaction list: ")
 
 
 def createreact():
@@ -22,9 +20,7 @@ def createreact():
 		active = True
 		while active:
 			search = input(prompt)
-			#search = ["NH4t", "NH4tm", "UREAt", "uahCv", "done"]
 			#user input searches for a BiGG ID in the file to pull equation, then loops to allow multiple searches
-			#print(search)
 			if search == "done":
 				active = False
 				#if the user types done the while loop closes
@@ -93,18 +89,13 @@ def createreact():
 						break
 					else:
 						continue
+				else: print("Reaction not found. Check spelling and make sure the reaction is present in your input file. ")
 						
-	#print(active)
-	#print(BIGGIDdict)
-	#print(lhs)
-	#print(rhs)
-	#print(lhs1)
-	#print(rhs1)
+	
 	#if the user types anything else then it is searched for in the file, line by line
 	#if a line starts with the query it is pulled and the user is asked for the next input
 	return BIGGIDlist, direction, lhs, rhs
 
-#print(createreact)
 def metabolitewriter(list, int):
 	"""Create a two component dictionary for each metabolite in a list.
 	
@@ -116,8 +107,7 @@ def metabolitewriter(list, int):
 		metabolitedict = {"coefficient":coefficient,"bigg_id":metabolite}
 		metabolites.append(metabolitedict)
 	return metabolites
-#print(BIGGIDlist)
-#print(direction)
+
 
 def nodepos(int, list, counter):
 	"""Define coordinates for each node on a single side of a reaction.
@@ -127,7 +117,6 @@ def nodepos(int, list, counter):
 	counter -- the number of metabolites in list
 	"""
 	nodeposy = ((int + ((len(list) * 100) - 100)) - (200 * (counter - 1)))
-	#print(nodeposy)
 	return nodeposy
 
 def segments(markerdict, reactnodedictleft, reactnodedictright, segnumber, totalcount):
@@ -138,8 +127,6 @@ def segments(markerdict, reactnodedictleft, reactnodedictright, segnumber, total
 	reactnodedictright -- dictionary containing metabolite IDs and their unique numerical IDs (right side)
 	segnumber -- a unique number assigned to each segment or join, starting from 1.
 	"""
-	print(totalcount)
-	print(markerdict)
 	segdict = {} 
 	segdict.setdefault(1 + totalcount, {"from_node_id": str(markerdict[1 + totalcount]), "to_node_id": str(markerdict[2 + totalcount]), "b1": None, "b2": None})
 	segdict.setdefault(1 + totalcount, {"from_node_id": str(markerdict[1 + totalcount]), "to_node_id": str(markerdict[3 + totalcount]), "b1": None, "b2": None})
@@ -151,9 +138,9 @@ def segments(markerdict, reactnodedictleft, reactnodedictright, segnumber, total
 		segdict.setdefault(segnumber, {"from_node_id": str(key), "to_node_id": str(markerdict[3 + totalcount]), "b1": None, "b2": None})
 	return segdict, segnumber
 
-def makedict():
+def makedict(display):
 	"""Writes BiGGIDs as keys in dictionary and stores equations and directions within them"""
-	dictlist = [{"map_name":"Algae.metabolism","map_id":"idnumber","map_description":"Algae metabolism\nLast Modified Wed Jan 30 2019 12:10:36 GMT+0000 (Greenwich Mean Time)","homepage":"https://escher.github.io","schema":"https://escher.github.io/escher/jsonschema/1-0-0#"}]
+	dictlist = [{"map_name":display,"map_id":"idnumber","map_description":display + "\nLast Modified Wed Jan 30 2019 12:10:36 GMT+0000 (Greenwich Mean Time)","homepage":"https://escher.github.io","schema":"https://escher.github.io/escher/jsonschema/1-0-0#"}]
 	idnum = 1000000
 	idnum2 = 1500000
 	posx = 0
@@ -210,15 +197,16 @@ def makedict():
 	BIGGIDdict.setdefault("text_labels", {})
 	BIGGIDdict.setdefault("canvas", {"x":0,"y":0,"width":posx,"height":posy})
 	dictlist.append(BIGGIDdict)
-	#print(dictlist)
 	return dictlist
-
+	
 def writefile():
 	"""Writes a json file containing dictionary 'display'"""
 	display = input("name your output file: ")
-	display += ".json"
-	with open(display,'w') as fdisplay:
-		json.dump(makedict(), fdisplay)
+	display2 = display + ".json"
+	with open(display2,'w') as fdisplay:
+		json.dump(makedict(display), fdisplay)
 		#dictionary is written to new json file
 
+
 writefile()	
+	
